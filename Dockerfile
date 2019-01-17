@@ -3,7 +3,7 @@ COPY kibana /kibana
 RUN apk add --no-cache zip
 RUN zip -r /gradiant_style.zip kibana
 
-FROM docker.elastic.co/kibana/kibana:6.4.2
+FROM docker.elastic.co/kibana/kibana-oss:6.4.2
 MAINTAINER simonv@gotbot.ai
 # custom favicons
 COPY favicons/* /usr/share/kibana/src/ui/public/assets/favicons/
@@ -17,4 +17,8 @@ RUN sed -i 's/title Kibana/title Gotbot Reports/g' /usr/share/kibana/src/ui/ui_r
 COPY --from=builder /gradiant_style.zip /
 RUN sed -i "s/commons.style.css'),/commons.style.css'),createAnchor('{{bundlePath}}\/gradiant_style.style.css'),/g" /usr/share/kibana/src/ui/ui_render/bootstrap/template.js.hbs
 RUN bin/kibana-plugin install file:///gradiant_style.zip
+RUN NODE_OPTIONS="--max-old-space-size=8192" bin/kibana-plugin install https://search.maven.org/remotecontent?filepath=com/floragunn/search-guard-kibana-plugin/6.4.2-17/search-guard-kibana-plugin-6.4.2-17.zip
 
+COPY kibana.yml /usr/share/kibana/config/
+COPY root-ca* /
+COPY kirk* /

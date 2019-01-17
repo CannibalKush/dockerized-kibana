@@ -1,0 +1,22 @@
+---
+# Default Kibana configuration from kibana-docker.
+
+server.name: kibana
+server.host: "0"
+elasticsearch.url: http://elasticsearch:9200
+elasticsearch.ssl.certificateAuthorities: /root-ca.pem
+elasticsearch.username: kibanaserver
+elasticsearch.password: kibanaserver
+elasticsearch.ssl.verificationMode: none
+elasticsearch.requestHeadersWhitelist: ["Authorization", "sgtenant"]
+
+server.ssl.enabled: false
+server.ssl.key: /kirk-key.pem
+server.ssl.certificate: /kirk.pem
+
+searchguard.basicauth.enabled: true
+searchguard.jwt.enabled: true
+searchguard.auth.type: "jwt"
+# If the token is not passed as HTTP header, but as request parameter,
+# configure the parameter name here
+searchguard.jwt.url_param: jwtparam
