@@ -1,0 +1,19 @@
+{
+  "app_port": 8080,
+  "app_dir": "/deploy",
+  "os_type": "linux",
+  "phantomjs": {
+    "wait_seconds": "30"
+  },
+  "type": {
+    "kibana": true,
+    "grafana": false
+  },
+  "request_headers": { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNocmlzQGdvdGJvdC5jby56YSIsInJvbGUiOiJTdXBlciBVc2VyIiwicm9sZXMiOiJhZG1pbiIsInN1YiI6ImtpYmFuYXNlcnZlciIsImlhdCI6MTU1MTc5MzU0OX0.cNZLcdak0bFMjtYiXJy7l20UvT1fB1jemtBQh_2heZU" },
+  "dashboard_url": "http://host.docker.internal:5601/app/kibana#/dashboard/",
+  "dashboards_list_url": "http://host.docker.internal:9200/.kibana/_search?size=1000",
+  "basic_auth_users": [
+    {"user": "u1", "password": "p1"},
+    {"user": "u2", "password": "p2"}
+  ]
+}
