@@ -1,10 +1,20 @@
-FROM alpine:3.7 as builder
+FROM node:10-alpine as builder
 COPY kibana /kibana
 RUN apk add --no-cache zip
 RUN zip -r /gradiant_style.zip kibana
 
 FROM docker.elastic.co/kibana/kibana-oss:6.5.4
 MAINTAINER simonv@gotbot.ai
+
+# Dependencies for sentinl reporting (puppeteer)
+USER root
+
+RUN yum install pango.x86_64 libXcomposite.x86_64 libXcursor.x86_64 libXdamage.x86_64 libXext.x86_64 libXi.x86_64 libXtst.x86_64 cups-libs.x86_64 libXScrnSaver.x86_64 libXrandr.x86_64 GConf2.x86_64 alsa-lib.x86_64 atk.x86_64 gtk3.x86_64 -y
+
+RUN yum install ipa-gothic-fonts xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-utils xorg-x11-fonts-cyrillic xorg-x11-fonts-Type1 xorg-x11-fonts-misc -y
+# End dependencies
+
+USER 1000
 # custom favicons
 COPY favicons/* /usr/share/kibana/src/ui/public/assets/favicons/
 # custom throbber
@@ -13,12 +23,16 @@ RUN sed -i 's/image\/svg+xml.*");/image\/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4w
 # custom HTML title information
 RUN sed -i 's/title Kibana/title Gotbot Reports/g' /usr/share/kibana/src/ui/ui_render/views/chrome.pug
 
+
 # custom plugin css
 COPY --from=builder /gradiant_style.zip /
+# COPY /sentinl-v6.5.4.zip /
 RUN sed -i 's/commons.style.css`,/commons.style.css`,`${bundlePath}\/gradiant_style.style.css`,/g' /usr/share/kibana/src/ui/ui_render/ui_render_mixin.js
 RUN bin/kibana-plugin install file:///gradiant_style.zip --no-optimize
 RUN NODE_OPTIONS="--max-old-space-size=8192" bin/kibana-plugin install https://search.maven.org/remotecontent?filepath=com/floragunn/search-guard-kibana-plugin/6.5.4-17/search-guard-kibana-plugin-6.5.4-17.zip
+RUN bin/kibana-plugin install https://github.com/sirensolutions/sentinl/releases/download/tag-6.5.0-0/sentinl-v6.5.4.zip
 
-COPY kibana.yml /usr/share/kibana/config/
 COPY root-ca* /
 COPY kirk* /
+
+COPY kibana.yml /usr/share/kibana/config/

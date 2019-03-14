@@ -14,10 +14,31 @@ server.ssl.enabled: false
 server.ssl.key: /kirk-key.pem
 server.ssl.certificate: /kirk.pem
 
-searchguard.basicauth.enabled: false
+searchguard.basicauth.enabled: true
 searchguard.jwt.enabled: true
 searchguard.auth.type: "jwt"
 # xpack.security.enabled: false
 # If the token is not passed as HTTP header, but as request parameter,
 # configure the parameter name here
 searchguard.jwt.url_param: jwtparam
+
+sentinl:
+  settings:
+    email:
+      active: true
+      host: 'smtp.gmail.com'
+      user: 'no-reply@gotbot.co.za'
+      password: '$uperGotbot2018!!!'
+      port: 465
+      # domain: 'gmail.com'
+      ssl: true
+      # tls: true
+      # authentication: ['PLAIN', 'LOGIN', 'CRAM-MD5', 'XOAUTH2']
+      # timeout: 10000  # mail server connection timeout
+      # cert:
+        # key: '/full/sys/path/to/key/file'
+        # cert: '/full/sys/path/to/cert/file'
+        # ca: '/full/sys/path/to/ca/file'
+    report:
+      active: true
+      engine: puppeteer # options: horseman, puppeteer
