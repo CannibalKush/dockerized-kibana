@@ -4,7 +4,7 @@ RUN apk add --no-cache zip
 RUN zip -r /gradiant_style.zip kibana
 
 FROM docker.elastic.co/kibana/kibana-oss:6.5.4
-MAINTAINER simonv@gotbot.ai
+LABEL maintainer=simonv@gotbot.ai
 
 # Dependencies for sentinl reporting (puppeteer)
 USER root
